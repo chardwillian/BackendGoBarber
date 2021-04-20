@@ -49,10 +49,6 @@ export default class ProfileController {
             created_at: user.created_at,
             updated_at: user.updated_at,
         };
-        //  const { password: saaa, ...userWithoutPassword } = user;
-
-        //  return response.json({ user: userWithoutPassword });
-        // delete user.password;
 
         return response.json(userWithoutPassword);
     }
