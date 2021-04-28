@@ -4,6 +4,7 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 
 import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
+import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
 import Appointment from '../entities/Appointment';
 
 class AppointmentsRepository implements IAppointmentsRepository {
@@ -33,11 +34,33 @@ class AppointmentsRepository implements IAppointmentsRepository {
         return appointments;
     }
 
-    public async listAll(): Promise<Appointment[] | undefined> {
-        const findAppointmentAll = await this.ormRepository.find();
+    public async findAllInDayFromProvider({
+        provider_id,
+        day,
+        month,
+        year,
+    }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
+        const parsedDay = String(day).padStart(2, '0');
+        const parsedMonth = String(month).padStart(2, '0'); // pois a função raw da erro quando compara com o month pois até o mês 10, não seria 01,02 seria apenas 1,2
+        // para resolver esse problema, completamos os digitos que faltam com zero a esquerda.
+        const appointments = await this.ormRepository.find({
+            where: {
+                provider_id,
+                date: Raw(
+                    dateFieldName =>
+                        `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+                ),
+            },
+        });
 
-        return findAppointmentAll;
+        return appointments;
     }
+
+    // public async listAll(): Promise<Appointment[] | undefined> {
+    //     const findAppointmentAll = await this.ormRepository.find();
+
+    //     return findAppointmentAll;
+    // }
 
     public async findByDate(date: Date): Promise<Appointment | undefined> {
         const findAppointment = await this.ormRepository.findOne({
@@ -49,9 +72,14 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
     public async create({
         provider_id,
+        user_id,
         date,
     }: ICreateAppointmentDTO): Promise<Appointment> {
-        const appointment = this.ormRepository.create({ provider_id, date });
+        const appointment = this.ormRepository.create({
+            provider_id,
+            user_id,
+            date,
+        });
 
         await this.ormRepository.save(appointment);
 

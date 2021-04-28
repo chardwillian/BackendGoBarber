@@ -3,13 +3,14 @@ import { parseISO } from 'date-fns';
 import { container } from 'tsyringe';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
-import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+// import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
 export default class AppointmentsController {
     public async create(
         request: Request,
         response: Response,
     ): Promise<Response> {
+        const user_id = request.user.id;
         const { provider_id, date } = request.body;
 
         const parsedDate = parseISO(date);
@@ -19,18 +20,19 @@ export default class AppointmentsController {
         const appointment = await createAppointment.execute({
             date: parsedDate,
             provider_id,
+            user_id,
         });
 
         return response.json(appointment);
     }
 
-    public async list(request: Request, response: Response): Promise<Response> {
-        const AppointmentRepository = container.resolve<
-            IAppointmentsRepository
-        >('AppointmentsRepository');
+    // public async list(request: Request, response: Response): Promise<Response> {
+    //     const AppointmentRepository = container.resolve<
+    //         IAppointmentsRepository
+    //     >('AppointmentsRepository');
 
-        const appointmentAllAppointment = await AppointmentRepository.listAll();
+    //     const appointmentAllAppointment = await AppointmentRepository.listAll();
 
-        return response.json(appointmentAllAppointment);
-    }
+    //     return response.json(appointmentAllAppointment);
+    // }
 }
