@@ -9,7 +9,7 @@ export default class ProviderMonthAvailabilityController {
         response: Response,
     ): Promise<Response> {
         const provider_id = request.params.id;
-        const { month, year } = request.body;
+        const { month, year } = request.query; // aqui coloquei query pois o browser não tem suporte para requisições tipo GET, só POST, PUT E PATCH
 
         const listProviderMonthAvailability = container.resolve(
             ListProviderMonthAvailabilityService,
@@ -17,8 +17,8 @@ export default class ProviderMonthAvailabilityController {
 
         const availability = await listProviderMonthAvailability.execute({
             provider_id,
-            month,
-            year,
+            month: Number(month),
+            year: Number(year),
         });
 
         return response.json(availability);

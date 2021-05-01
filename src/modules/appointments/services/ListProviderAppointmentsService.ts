@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { classToClass } from 'class-transformer';
 import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
@@ -33,6 +34,9 @@ class ListProviderAppointmentsService {
             cacheKey,
         );
 
+        // let appointments; // tava habilitado essa linha pra eu testar o uso do  relations: ['user'],
+        // no AppointmentsRepository do typeORM, daí desabilito as 3 linhas acima referentes ao cache
+
         if (!appointments) {
             appointments = await this.appointmentsRepository.findAllInDayFromProvider(
                 {
@@ -45,7 +49,7 @@ class ListProviderAppointmentsService {
 
             // console.log('Buscou do banco');
 
-            await this.cacheProvider.save(cacheKey, appointments);
+            await this.cacheProvider.save(cacheKey, classToClass(appointments));
         }
 
         return appointments;

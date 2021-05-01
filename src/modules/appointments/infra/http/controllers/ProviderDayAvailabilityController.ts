@@ -8,8 +8,8 @@ export default class ProviderDayAvailabilityController {
         request: Request,
         response: Response,
     ): Promise<Response> {
-        const { provider_id } = request.params; // aqui foi feito desestruturação, já no monthAvailability não
-        const { day, month, year } = request.body; // o motivo foi pq eu quis ver e entender as duas formas funcionando
+        const { provider_id } = request.params; // aqui foi feito desestruturação, já no monthAvailability não o motivo foi pq eu quis ver e entender as duas formas funcionando
+        const { day, month, year } = request.query; // aqui coloquei query pois o browser não tem suporte para requisições tipo GET, só POST, PUT E PATCH
 
         const listProviderDayAvailability = container.resolve(
             ListProviderDayAvailabilityService,
@@ -17,9 +17,9 @@ export default class ProviderDayAvailabilityController {
 
         const availability = await listProviderDayAvailability.execute({
             provider_id,
-            day,
-            month,
-            year,
+            day: Number(day),
+            month: Number(month),
+            year: Number(year),
         });
 
         return response.json(availability);
