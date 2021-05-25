@@ -44,10 +44,10 @@ class CreateAppointmentService {
                 "You can't create an appointment with yourself.",
             );
         }
-
-        if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 17) {
+        // abaixo podemos alterar o horário de funcionamento dos agendamentos
+        if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 19) {
             throw new AppError(
-                'You can only create appointments between 8am and 5pm',
+                'You can only create appointments between 8am and 7pm',
             );
         }
 

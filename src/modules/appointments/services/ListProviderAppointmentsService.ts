@@ -34,7 +34,7 @@ class ListProviderAppointmentsService {
             cacheKey,
         );
 
-        // let appointments; // tava habilitado essa linha pra eu testar o uso do  relations: ['user'],
+        // let appointments = null; // tava habilitado essa linha pra eu testar o uso do  relations: ['user'],
         // no AppointmentsRepository do typeORM, daí desabilito as 3 linhas acima referentes ao cache
 
         if (!appointments) {
