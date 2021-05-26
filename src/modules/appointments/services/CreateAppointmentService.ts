@@ -39,6 +39,10 @@ class CreateAppointmentService {
             );
         }
 
+        if (appointmentDate.getDay() === 0) {
+            throw new AppError('Você não pode agendar um horário no domingo.');
+        }
+
         if (user_id === provider_id) {
             throw new AppError(
                 "You can't create an appointment with yourself.",
