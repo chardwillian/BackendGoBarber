@@ -1,5 +1,5 @@
-import { formatDistanceToNow } from "date-fns";
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+import { formatDistanceToNow } from 'date-fns';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export default class CreateUsers1605216410739 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -7,16 +7,16 @@ export default class CreateUsers1605216410739 implements MigrationInterface {
             new Table({
                 name: 'users',
                 columns: [
-                {
+                    {
                         name: 'id',
                         type: 'uuid',
                         isPrimary: true,
                         generationStrategy: 'uuid',
                         default: 'uuid_generate_v4()',
-                   },
-                   {
+                    },
+                    {
                         name: 'name',
-                        type: 'varchar',                  
+                        type: 'varchar',
                     },
                     {
                         name: 'email',
@@ -45,6 +45,4 @@ export default class CreateUsers1605216410739 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('users');
     }
-
-
 }
